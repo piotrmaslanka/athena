@@ -1,0 +1,9 @@
+{% extends "radmin/manage_accounts_list.html" %}
+
+{% block layout_rightside %}
+    <h1>Utwórz nowe konto</h1>
+    <form action="/admin/accounts/create/" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Utwórz">
+    </form>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Panel nauczyciela{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    h1 { font-size: 1.5em; margin-bottom: 3px; }
+    p { margin-top: 10px; margin-bottom: 10px; }
+    .str { font-weight: bold ;}
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/profile/">Profil</a></li>
+    <li><a href="/teacher/groups/">Grupy</a></li>
+    <li><a href="/teacher/exams/">Egzaminy</a></li>
+    <li><a href="/teacher/tests/">Baza testów</a></li>
+{% endblock %}
+
+{% block layout_content %}
+    <h1>Panel nauczyciela</h1>
+
+    {% if request.user.is_demo %}
+    <p style="font-size: 1.5em; font-weight: bold; color: red;">JESTEŚ W MIEJSCU W KTÓRYM NIE POWINNO CIĘ BYĆ.</p>
+    <p><span class="str">Jesteś zalogowany jak nauczyciel domyślny</span><br>        
+        Konto nauczyciela domyślnego istnieje tylko ze względów technologicznych do obsługi kont i testów demonstracyjnych. Nie powinno być potrzeby korzystania z tego konta. Możesz zepsuć system. <span class="str">WYLOGUJ SIĘ</span>.</p>
+    {% endif %}
+
+    <p>
+        Możesz układać nowe pytania i tworzyć wzory testów, czyli bazy pytań. Potem, gdy przyjdzie czas egzaminu, system automatycznie ułoży z nich testy - inne dla każego zdającego. Możesz to zrobić w zakładce <a href="/teacher/tests/">Testy</a>.
+    </p>
+
+    <p>
+        Zdający zapisują się do grup, celem łatwiejszego zdawania. Każdy zdający powinien złożyć z poziomu swojego konta wniosek o dołączenie do grupy. Możesz zarządzać swoimi grupami, akceptować wnioski i odłączać zdających od grup w zakładce <a href="/teacher/groups/">Grupy</a>.
+    </p>
+
+    <p>
+        W zakładce <a href="/teacher/exams/">Egzaminy</a> możesz zarządzać egzaminami, terminami tychże, możesz dopuszczać konkretnych zdających do tych terminów, a także uruchamiać i nadzorować zaliczenia.
+    </p>
+    <p>
+        Swoje hasło możesz zmienić w zakładce <a href="/profile/">Profil</a>.
+    </p>
+    <p>Po zakończonej pracy nie zapomnij się <a href="/logout/">wylogować</a>.</p>
+
+</p>
+{% endblock %}

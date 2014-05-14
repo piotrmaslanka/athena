@@ -1,0 +1,94 @@
+{% extends "base-layout.html" %}
+
+{% block layout_head %}
+<style type="text/css">
+    .student { 
+        width: 600px;
+    }
+        .student .name { width: 400px; display: inline-block; text-align: center; }
+        .student .state { width: 100px; display: inline-block; text-align: center; }
+        .student .grade { width: 50px; display: inline-block; text-align: center; font-size: 1.5em; }
+        .student .kill { width: 50px; display: inline-block; text-align: center; }
+        .student .showproto { width: 50px; display: inline-block; text-align: center; }
+    
+        .killed { font-weight: bold; color: red; }
+    
+</style>
+<script type="text/javascript">
+    function showproto(protoid) {
+        window.open('/teacher/exams/protocol/'+protoid+'/');
+    }
+    
+    function finish_exam() {
+        if (!confirm('Czy na pewno chcesz zakończyć egzamin?\nPrace studentów którzy jeszcze nie skończyli zostaną ANULOWANE!')) return;
+        $.post('/teacher/exams/{{ term.exam.id }}/terms/{{ term.id }}/supervise/ajax/', {
+            'command': 'finish'
+        }, function() { 
+            $('#headlab').html('Wyniki egzaminu');
+            $('#endexam').remove();
+        });
+    }
+    function kill(sessid) {
+        $.post('/teacher/exams/{{ term.exam.id }}/terms/{{ term.id }}/supervise/ajax/', {
+            'command': 'kill',
+            'session_to_kill': sessid
+        }, function() {});
+    }
+    function refresh() {
+        $.post('/teacher/exams/{{ term.exam.id }}/terms/{{ term.id }}/supervise/ajax/', {
+            'command': 'refresh'
+        }, function(data) {
+            $('#studentlist').empty();
+            data = data['students'];
+            for (var i=0; i<data.length; i++) {
+                var student = data[i];
+                
+                var lut = ['Oczekuje', 'Pisze', 'Skończył', 'Anulowany'];
+                
+                if (student[4] == null) student[4] = 'N/A';
+                
+                var sbase = $('<div class="student"><div class="name">'+student[0]+' '+student[1]+' '+student[2]+'</div><div class="state'+(student[3] == 3 ? ' killed' : '')+'">'+lut[student[3]]+'</div><div class="grade">'+student[4]+'</div></div>');
+                
+                if (student[3] < 2) sbase.append('<div class="kill"><a href="javascript:kill('+student[5]+');">Anuluj</a></div>');                
+                else sbase.append('<div class="showproto"><a href="javascript:showproto('+student[5]+');">Protokół</a></div>');                
+                
+                $('#studentlist').append(sbase);
+            }
+            setTimeout("refresh()", 5000);
+        });
+    }
+    
+    $(refresh);
+</script>
+{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/profile/">Profil</a></li>
+    <li><a href="/teacher/groups/">Grupy</a></li>
+    <li class="current"><a href="/teacher/exams/">Egzaminy</a></li>
+    <li><a href="/teacher/tests/">Baza testów</a></li>
+{% endblock %}
+
+{% block title %}Ustawianie terminu - {{ term.exam.name }}{% endblock %}
+
+{% block layout_content %}
+    <h1><a href="/teacher/exams/{{ term.exam.id }}/">{{ term.exam.name }}</a></h1>
+    <h1>Termin: <a href="/teacher/exams/{{ term.exam.id }}/terms/{{ term.id }}/">{{ term.name }}</a></h1>
+    <div id="headlab" style="margin-top: 20px; font-size: 1.5em; text-align: center;">
+        {% if not term.is_closed %}
+            Nadzorowanie egzaminu
+        {% else %}
+            Wyniki egzaminu 
+        {% endif %}
+</div>
+    <hr>
+
+    <div style="margin-left: 100px; margin-right: 100px; width: 600px;" id="studentlist">
+        
+    </div>
+
+    {% if not term.is_closed %}
+    <div id="endexam" style="border: 1px solid black; margin-top: 50px; margin-left: 99px; width: 600px; background-color: lightgray; text-align: center; height: 50px; line-height: 50px; cursor: pointer;" onclick="finish_exam()">Zakończ egzamin</div>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "rteacher/manage_groups_list.html" %}
+
+{% block title %}Zarządzanie - {{ group.name }}{% endblock %}
+
+{% block layout_rightside %}
+    <form action="/teacher/groups/{{ group.id }}/" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Zapisz">
+    </form>
+
+    <form action="/teacher/groups/{{ group.id }}/delete/" method="post" class="ml30">
+        <input type="submit" value="Usuń grupę">
+    </form>
+{% endblock %}

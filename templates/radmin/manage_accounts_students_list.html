@@ -1,0 +1,48 @@
+{% extends "base-layout.html" %}
+
+{# root page for students #}
+
+{% block title %}Strona główna{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    h1 { font-size: 1.5em; margin-bottom: 3px; }
+    p { text-align: justify; margin-left: 30px; }
+    .pages { text-align: center; margin-top: 10px; }
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/profile/">Profil</a></li>
+    <li class="current"><a href="/admin/accounts/">Konta</a></li>
+{% endblock %}
+
+{% block layout_content %}
+<div id="base_leftside">
+    <h1 style="margin-top: 20px;">Studenci</h1>
+    <p>
+        {% for account in page.object_list %}
+            {% if account.id == selected_user_id %}
+                {{ account.login }} : {{ account.name }} {{ account.surname }}
+            {% else %}
+            <a href="/admin/accounts/{{ account.id }}/">{{ account.login }} : {{ account.name }} {{ account.surname }}</a> <br>
+            {% endif %}
+        {% empty %}
+            brak
+        {% endfor %}
+    </p>
+    <div class="pages">
+        {% if page.has_previous %}
+            <a href="/admin/accounts/students/{{ page.previous_page_number }}/">{{ page.previous_page_number }}</a> | 
+        {% endif %}
+            {{ page.number }}
+        {% if page.has_next %}
+            | <a href="/admin/accounts/students/{{ page.next_page_number }}/">{{ page.next_page_number }}</a>
+        {% endif %}
+    </div>
+    <div style="margin-bottom: 20px;"></div>
+</div>
+<div id="base_rightside">
+    {% block layout_rightside %}{% endblock %}
+</div>
+{% endblock %}

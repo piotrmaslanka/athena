@@ -1,0 +1,205 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Pytanie - {{ test.name }}{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    h1 { font-size: 1.5em; }
+    .eitem { width: 250px; display: inline-block; }
+    .category .catname { font-size: 1.5em; }
+    .invalid { color: red; }
+    #aj_time { width: 60px; }    
+    #squestion { padding: 3px 0px 3px 0px; margin-left: 20px; margin-bottom: 10px; }
+    #squestion li { list-style-type: disc; }
+
+
+    .answer_content { width: 100%; }
+    #button_add_answer { margin-top: 10px; }
+</style>
+<script type="text/javascript">
+    is_multichoice = {{ test.is_multichoice|lower }};
+
+    function delete_answer(answer_id) {
+        $.post('/teacher/tests/{{ test.id }}/ajax/', {
+            operation: 'delete_answer',
+            answer: answer_id
+        }, function(data) {
+            $('#answer'+answer_id).remove();
+        });
+    }
+
+    function save_answer(answer_id) {
+        var kcontent = $('#answer'+answer_id+' .answer_content').val();
+        var kis_right = $('#answer'+answer_id+' .answer_right').is(':checked');
+
+        $('#answer'+answer_id+' .answer_content').prop('disabled', true);
+        $('#answer'+answer_id+' .answer_right').prop('disabled', true);
+
+        $.post('/teacher/tests/{{ test.id }}/ajax/', {
+            is_right: (kis_right ? 1 : 0),
+            operation: 'modify_answer',
+            answer: answer_id,
+            content: kcontent
+        }, function(data) {
+            $('#answer'+data.id+' .answer_content').val(data.value[0]);
+            if (data.value[1])
+                $('#answer'+data.id+' .answer_right').attr('checked', 'checked');
+            else
+                $('#answer'+data.id+' .answer_right').removeAttr('checked');
+            $('#answer'+answer_id+' .answer_content').prop('disabled', false);
+            $('#answer'+answer_id+' .answer_right').prop('disabled', false);
+        });
+    }
+
+    function is_right_changed(answer_id) {
+        var current_state = $('#answer'+answer_id+' .answer_right').is(':checked');
+
+        if (current_state && (!is_multichoice)) {
+            var a = $(".answer");
+            for (var i=0; i<a.length; i++)
+                if (a[i].id != 'answer'+answer_id)
+                    $('#'+a[i].id+' .answer_right').removeAttr('checked');
+        }
+
+        save_answer(answer_id);
+    }
+
+    $(function() {
+        $('#aj_time').change(function() {
+            $('#aj_time').attr('disabled', 'disabled');
+            $.post('/teacher/tests/{{ test.id }}/ajax/', {
+                time: $('#aj_time').val(),
+                operation: 'change_time'
+            }, function(data) {
+                $('#aj_time').val(data['value']).removeAttr('disabled');
+            });
+        });
+
+        $('#aj_questions').change(function() {
+            $('#aj_questions').attr('disabled', 'disabled');
+            $.post('/teacher/tests/{{ test.id }}/ajax/', {
+                questions: $('#aj_questions').val(),
+                category: {{ category.id }},
+                operation: 'questions_number'
+            }, function(data) {
+                $('#aj_questions').val(data['value']).removeAttr('disabled');
+            });
+        });
+
+
+        $('#button_add_answer').click(function() {
+            $.post('/teacher/tests/{{ test.id }}/ajax/', {
+                operation: 'create_answer',
+                question: {{ question.id }}
+            }, function(data) {
+                var checked = data.value[1] ? ' checked ' : '';
+
+                var btn = $('<button>Usuń odpowiedź</button>');
+                btn.click(function() { delete_answer(data.id); });
+
+                var answer = $('<div class="answer" id="answer'+data.id+'"></div>');
+
+                var input = $('<input type="text" class="answer_content" value="'+data.value[0]+'"></div>');
+                input.change(function() { save_answer(data.id); })
+
+                answer.append(input);
+
+                var radio = $('<input class="answer_right" type="'+(is_multichoice ? "checkbox" : "radio")+'"'+checked+'>');
+                radio.change(function() { is_right_changed(data.id); });
+                answer.append(radio);
+                answer.append('Poprawna');
+                answer.append(btn);
+                $('#answers').append(answer);
+            });
+        });
+    });    
+</script>
+{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/profile/">Profil</a></li>
+    <li><a href="/teacher/groups/">Grupy</a></li>
+    <li><a href="/teacher/exams/">Egzaminy</a></li>
+    <li class="current"><a href="/teacher/tests/">Baza testów</a></li>
+{% endblock %}
+
+{% block layout_content %}
+    <h1><a href="/teacher/tests/{{ test.id }}/">{{ test.name }}</a></h1>
+    <div class="eitem">
+    {% if test.is_multichoice %}Wielokrotnego wyboru{% else %}Jednokrotnego wyboru{% endif %}
+    </div>
+    <div class="eitem">
+    {% if test.is_time_per_question %}
+        Długość testu determinują pytania
+    {% else %}
+        Test trwa <input type="text" id="aj_time" value="{{ test.time|default_if_none:"" }}"> sekund
+    {% endif %}
+    </div>
+    <div class="eitem">
+    {% if test.can_go_back %}Można się cofać{% else %}Nie można się cofać{% endif %}
+    </div>
+    <hr>
+
+<div id="base_leftside">
+    <h1>{{ category.name }}</h1>
+    Pytań wybieranych z kategorii: <input type="text" id="aj_questions" value="{{ category.question_amount }}">
+
+    <ul id="squestion">
+    {% for que in category.question_set.all %}
+        <li>
+        {% if que == question %}
+            {{ que.content|truncatewords:10 }}...<br>
+        {% else %}
+            <a href="/teacher/tests/{{ test.id }}/category/{{ category.id }}/question/{{ que.id }}/">{{ que.content|truncatewords:10 }}...</a><br>
+        {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+
+    <a href="/teacher/tests/{{ test.id }}/category/{{ category.id }}/question/new/">Dodaj nowe pytanie</a>
+
+</div>
+<div id="base_rightside">
+    <form action="/teacher/tests/{{ test.id }}/category/{{ category.id }}/question/{{ question.id }}/" method="post">
+        {{ form.as_p }}
+        <input type="submit" name="save_content" value="Zapisz">
+    </form>
+
+    <hr>
+
+    <div id="answers">
+        {% for answer in question.answer_set.all %}
+        <div class="answer" id="answer{{ answer.id }}">
+            <input type="text" class="answer_content" value="{{ answer.content }}" onchange="save_answer({{ answer.id }})">
+            <input onchange="is_right_changed({{ answer.id }})" class="answer_right" type="{% if test.is_multichoice %}checkbox{% else %}radio{% endif %}"{% if answer.is_right %}checked{% endif %}> Poprawna
+            <button onclick="delete_answer({{ answer.id }})">Usuń odpowiedź</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <button id="button_add_answer">Dodaj odpowiedź</button>
+
+    <hr>
+
+    {% if question.get_attachment_or_None %}
+        <strong>Obrazek:</strong><br>
+        <img src="{{ question.get_attachment_or_None.get_url }}" alt="{{ question.get_attachment_or_None.description|urlencode }}" style="max-width: 400px;">
+        <form action="/teacher/tests/{{ test.id }}/category/{{ category.id }}/question/{{ question.id }}/" method="post">
+            <input type="submit" name="delete_image" value="Usuń obrazek">
+        </form>
+    {% endif %}
+
+    <form action="/teacher/tests/{{ test.id }}/category/{{ category.id }}/question/{{ question.id }}/" method="post" enctype="multipart/form-data">
+        {{ imgform.as_p }}
+        <input type="submit" name="save_image" value="Zapisz">
+    </form>
+
+    <hr>
+
+    <form action="/teacher/tests/{{ test.id }}/category/{{ category.id }}/question/{{ question.id }}/" method="post">
+        <input type="submit" name="delete_question" value="Usuń pytanie">
+    </form>
+
+
+</div>
+{% endblock %}

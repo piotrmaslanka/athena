@@ -1,0 +1,47 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Lista egzaminów{% endblock %}
+
+{% block layout_head %}
+{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/profile/">Profil</a></li>
+    <li><a href="/teacher/groups/">Grupy</a></li>
+    <li class="current"><a href="/teacher/exams/">Egzaminy</a></li>
+    <li><a href="/teacher/tests/">Baza testów</a></li>
+{% endblock %}
+
+{% block layout_content %}
+    {% if exam %}
+        <h1><a href="/teacher/exams/{{ exam.id }}/">{{ exam.name }}</a></h1>
+        <hr>
+    {% endif %}
+
+<div id="base_leftside">
+    {% if selected_exam_id == 'create' %}
+        Dodaj nową grupę
+    {% else %}
+        <a href="/teacher/exams/create/">Dodaj nowy egzamin</a>
+    {% endif %}
+
+
+<h1 style="margin-top: 20px;">Egzaminy</h1>
+<p>
+    {% for exam in exams %}
+        {% if exam.id == selected_exam_id %}
+            {{ exam.name }} ({{ exam.term_set.count }} terminów)
+        {% else %}
+            <a href="/teacher/exams/{{ exam.id }}/">{{ exam.name }}</a> 
+            ({{ exam.term_set.count }} terminów)        
+        {% endif %}<br>
+    {% empty %}
+        brak
+    {% endfor %}
+</p>
+<div style="margin-bottom: 20px;"></div>
+</div>
+<div id="base_rightside">
+    {% block layout_rightside %}{% endblock %}
+</div>
+{% endblock %}

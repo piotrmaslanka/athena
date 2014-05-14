@@ -1,0 +1,120 @@
+{% extends "base-layout.html" %}
+
+{% block layout_head %}
+<style type="text/css">
+    th { font-weight: bold; }
+    table { text-align: center; margin-bottom: 20px; }
+    td, th { padding-right: 10px; }
+    .listhdr { width: 100%; text-align: center; font-weight: bold; }
+    #fastlookup { width: 99%; height: 18px; line-height: 18px;}
+    .student { width: 100%; height: 20px; line-height: 20px; border: 1px solid black; background: lightgray; text-align: center; cursor: pointer; }
+        .student span { display: inline-block; }
+        .student .name { width: 25%; }
+        .student .surname { width: 35%; }
+        .student .number { width: 30%; }
+    #accept {
+        width: 100%;
+        height: 20px;
+        line-height: 20px;
+        border: 1px solid black;
+        background: green;
+        text-align: center;
+        cursor: pointer;
+        font-weight: bold;
+    }
+</style>
+<script type="text/javascript">
+    function matches(name, surname, number, chunk) {
+        if (chunk == '') return true;
+        name = String(name).search(chunk) > -1;
+        surname = String(surname).search(chunk) > -1;
+        number = String(number).search(chunk) > -1;
+        return (name || surname || number);
+    }
+
+    function student_selected(studentid) {
+        var studobj = $('#student'+studentid).attr('onclick', '').unbind('click').detach().click(function() { student_unselected(studentid); });
+        $('#students_selected').append(studobj);
+    }
+
+    function student_unselected(studentid) {
+        var studobj = $('#student'+studentid).unbind('click').detach().click(function() { student_selected(studentid); });
+        $('#students_to_select').append(studobj);
+    }
+
+    $(function () {
+        $('#fastlookup').keyup(function() {
+            var chunk = String($('#fastlookup').val()).trim();
+            var students = $('#students_to_select .student');
+            for (var i=0; i<students.length; i++) {
+                var student = students[i];
+                if (matches($('#'+student.id+' .name').html(),
+                            $('#'+student.id+' .surname').html(),
+                            $('#'+student.id+' .number').html(),
+                            chunk)) {
+                    $(student).css('display', 'block');
+                } else {
+                    $(student).css('display', 'none');
+                }
+            }
+        }).click(function() {
+            if ($('#fastlookup').val() == 'Filtruj listę: wpisz imię, nazwisko, numer... (wyszukiwanie)')
+                $('#fastlookup').val('');
+        });
+        $('#accept').click(function() {
+            if (!confirm('Czy na pewno rozpocząć egzamin?')) return;
+            var students = $('#students_selected .student');
+            var studs = new Array();
+            for (var i=0; i<students.length; i++) {
+                var stud = students[i];
+                if (stud.id.indexOf('student') != 0) return;
+                realid = parseInt(stud.id.slice(7));
+                studs.push(realid);
+            }
+            $.post('/teacher/exams/{{ term.exam.id }}/terms/{{ term.id }}/setup/ajax/', {
+                "students": JSON.stringify(studs)
+            }, function() {
+                window.location = '/teacher/exams/{{ term.exam.id }}/terms/{{ term.id }}/supervise/';
+            });
+        });
+    });
+</script>
+{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/profile/">Profil</a></li>
+    <li><a href="/teacher/groups/">Grupy</a></li>
+    <li class="current"><a href="/teacher/exams/">Egzaminy</a></li>
+    <li><a href="/teacher/tests/">Baza testów</a></li>
+{% endblock %}
+
+{% block title %}Ustawianie terminu - {{ exam.name }}{% endblock %}
+
+{% block layout_content %}
+    {% if exam %}
+        <h1><a href="/teacher/exams/{{ exam.id }}/">{{ exam.name }}</a></h1>
+        <h1>Termin: <a href="/teacher/exams/{{ exam.id }}/terms/{{ term.id }}/">{{ term.name }}</a></h1>
+        <div style="margin-top: 20px; font-size: 1.5em; text-align: center;">Wybierz studentów którzy piszą ten termin</div>
+        <hr>
+    {% endif %}
+
+<div id="base_leftside">
+    <div class="listhdr">Studenci których możesz wybrać (kliknij na studenta)</div>
+    <input id="fastlookup" value="Filtruj listę: wpisz imię, nazwisko, numer... (wyszukiwanie)">
+    <div id="students_to_select">
+        {% for student in students %}
+        <div class="student" id="student{{ student.id }}" onclick="student_selected({{ student.id }})">
+            <span class="name">{{ student.name }}</span>
+            <span class="surname">{{ student.surname }}</span>
+            <span class="number">{{ student.number }}</span>    
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div id="base_rightside">
+    <div class="listhdr">Wybrani studenci (kliknij by usunąć)</div>
+    <div id="accept">Kliknij tu by rozpocząć egzamin</div>
+    <div id="students_selected">
+    </div>        
+</div>
+{% endblock %}

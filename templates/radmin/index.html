@@ -1,0 +1,20 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Panel administratora{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/profile/">Profil</a></li>
+    <li><a href="/admin/accounts/">Konta</a></li>
+{% endblock %}
+
+{% block layout_content %}
+    <h1>Panel administratora</h1>
+
+    <p>
+        Jesteś zalogowany jako administrator. Z tej pozycji możesz zarządzać kontami. Tylko administrator może tworzyć nowe konta administratorów i nauczycieli. Możesz także zarządzać kontami studentów - zmieniać niektóre ich dane oraz usuwać te konta. Administrator może też zalogować się jako dowolny użytkownik, przy wykorzystaniu odpowiedniej opcji. Szczególnie jako administrator pamiętaj o <a href="/logout/">wylogowaniu się</a> po zakończonej pracy.
+    </p>
+    <p>
+        Swoje hasło możesz zmienić w zakładce <a href="/profile/">Profil</a>.
+    </p>
+
+{% endblock %}

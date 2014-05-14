@@ -1,0 +1,46 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Testy{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    h1 { font-size: 1.5em; margin-bottom: 3px; }
+    p { text-align: justify; margin-left: 30px; }
+    .test { margin: 10px 0px 10px 30px;}
+    .test_title { font-size: 1.4em;}
+
+    .valid { color: green; }
+    .invalid { color: red; }
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/profile/">Profil</a></li>
+    <li><a href="/teacher/groups/">Grupy</a></li>
+    <li><a href="/teacher/exams/">Egzaminy</a></li>
+    <li class="current"><a href="/teacher/tests/">Baza testów</a></li>
+{% endblock %}
+
+{% block layout_content %}
+
+<a href="/teacher/tests/create/">Dodaj nowy test</a>
+
+<h1 style="margin-top: 20px;">Baza wzorów testów</h1>
+{% for test in tests %}
+<p class="test">
+        <a class="test_title" href="/teacher/tests/{{ test.id }}/">{{ test.name }}</a><br>
+        {% if test.is_valid %}
+            <span class="valid">POPRAWNY</span>
+        {% else %}
+            <span class="invalid">NIEPOPRAWNY - edytuj test aby sprawdzić</span>
+        {% endif %}
+        <br>
+        {% if test.can_go_back %}Można się cofać{% else %}Nie można się cofać{% endif %}
+        -
+        {% if test.is_multichoice %}Wielokrotnego wyboru{% else %}Jednokrotnego wyboru{% endif %}
+</p>
+{% empty %}
+    brak
+{% endfor %}
+<div style="margin-bottom: 20px;"></div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Lista grup{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    th { font-weight: bold; }
+    table { border-collapse: collapse; margin-top: 15px; margin-left: 15px; }
+    td, th, table { border: 1px solid black; padding: 5px 5px 5px 5px; }    
+    
+    .archival a { color: darkgray; }
+    .archival { margin-bottom: 10px; }
+    
+    .group {
+        margin: 10px 0px 10px 0px;
+    }
+        .group .name {
+            float: left;
+            border-top: 1px; border-right: 2px; border-bottom: 2px; border-left: 1px;
+            border-style: solid; border-color: rgb(20, 24, 73);
+            text-align: center;
+            min-height: 20px;
+            margin-right: 5px;
+            padding: 5px 10px 5px 10px;
+        }
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/profile/">Profil</a></li>
+    <li class="current"><a href="/teacher/groups/">Grupy</a></li>
+    <li><a href="/teacher/exams/">Egzaminy</a></li>
+    <li><a href="/teacher/tests/">Baza testów</a></li>
+{% endblock %}
+
+{% block layout_content %}
+<div id="base_leftside">
+<h1 style="margin-top: 20px;">Grupy</h1>
+<div>
+    {% for group in current %}
+        <div class="group">
+            <div class="name">
+                <a href="/teacher/groups/{{ group.id }}/">{{ group.name }}</a> 
+            </div>
+            <a href="/teacher/groups/{{ group.id }}/members/">{{ group.students.count }} członków</a><br>
+            <a href="/teacher/groups/{{ group.id }}/requests/">{{ group.joinrequest_set.count}} wniosków o przyjęcie</a>
+        </div>
+    {% empty %}
+        brak
+    {% endfor %}
+</div>
+    <hr>
+<div class="archival">
+    {% for group in archival %}
+        <a href="/teacher/groups/{{ group.id }}/">{{ group.name }}</a>
+        (<a href="/teacher/groups/{{ group.id }}/members/">{{ group.students.count }} członków</a>)
+        <br>
+    {% empty %}
+        brak
+    {% endfor %}
+</div>
+    {% if selected_group_id == 'create' %}
+        Dodaj nową grupę
+    {% else %}
+        <a href="/teacher/groups/create/">Dodaj nową grupę</a>
+    {% endif %}
+
+<div style="margin-bottom: 20px;"></div>
+</div>
+<div id="base_rightside">
+    {% block layout_rightside %}{% endblock %}
+</div>
+{% endblock %}

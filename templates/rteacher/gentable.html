@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tabela zdawań {{ exam.name }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style type="text/css">
+        table { border-collapse: collapse; border: 1px solid black; }
+        td, th { padding: 5px 5px 5px 5px; border: 1px solid black; }
+        th { font-weight: bold; }
+    </style>
+</head>
+<body>
+<h1>Tabela zdawań {{ exam.name }}</h1>
+<table>
+    <tr>
+        <th></th>
+        {% for term in terms %}
+            <th>{{ term.name }}<br>{{ term.term_time|date:"d-m-Y H:i" }}</th>
+        {% endfor %}
+    </tr>
+    {% for surname, name, number, grades in xtab %}
+    <tr>
+        <td>{{ surname }} {{ name }} {{ number }}</td>
+        {% for grade in grades %}<td>{{ grade|default_if_none:"" }}</td>{% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

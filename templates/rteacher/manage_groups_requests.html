@@ -1,0 +1,37 @@
+{% extends "rteacher/manage_groups_list.html" %}
+
+{% block title %}Grupa {{ group.name }} - lista członków{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    .name { font-size: 1.2em; }
+    .number { font-size: 1.1em; }
+    .date { font-size: 0.8em; }
+    p div { margin: 3px 0px 3px 0px; }
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/profile/">Profil</a></li>
+    <li class="current"><a href="/teacher/groups/">Grupy</a></li>
+    <li><a href="/teacher/exams/">Egzaminy</a></li>
+    <li><a href="/teacher/tests/">Baza testów</a></li>
+{% endblock %}
+
+{% block layout_rightside %}
+<h1>Grupa {{ group.name }} - wnioski</h1>
+    {% for jr in group.joinrequest_set.all %}
+    <p>
+        <div class="name">{{ jr.student.name }} {{ jr.student.surname }}</div>
+        <div class="number">{{ jr.student.number }}</div>
+        <div>{{ jr.reason|linebreaksbr }}</div>
+        <div class="date">Złożono {{ jr.created_on }}</div>
+
+        <form class="standalone-button" action="/teacher/groups/{{ group.id }}/requests/" method="post"><input type="hidden" name="request_id" value="{{ jr.id }}"><input type="hidden" name="action" value="confirm"><input type="submit" value="Zatwierdź"></form></td>
+        <form class="standalone-button" action="/teacher/groups/{{ group.id }}/requests/" method="post"><input type="hidden" name="request_id" value="{{ jr.id }}"><input type="hidden" name="action" value="delete"><input type="submit" value="Usuń"></form></td>
+    </p>
+    <hr>
+    {% endfor %}
+</table>
+<div style="margin-bottom: 20px;"></div>
+{% endblock %}

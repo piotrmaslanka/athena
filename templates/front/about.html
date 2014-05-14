@@ -1,0 +1,35 @@
+{% extends "base-layout.html" %}
+
+{# page for not-logged-in users who visit the page root #}
+
+{% block title %}Strona główna{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    h1 { font-size: 1.5em; margin-bottom: 3px; }
+    p { text-align: justify; margin-top: 10px; margin-bottom: 10px;}
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+    <li class="current"><a href="/">Główna</a></li>
+    <li><a href="/register/">Zarejestruj</a></li>
+    <li><a href="/login/">Zaloguj</a></li>
+    <li><a href="/login/demo/">Demo</a></li>
+{% endblock %}
+
+{% block layout_content %}
+<h1>O systemie egzaminacyjnym Athena</h1>
+
+<p>
+    System egzaminacyjny Athena powstał jako projekt na przedmiot <a href="http://web.prz.edu.pl/">Technologie Sieci Web</a> prowadzony przez <a href="http://jprokop.prz.edu.pl">dr. inż. Jana Prokopa</a> w roku akademickim 2013/2014. System stworzony został przez Piotra Maślankę, studenta 3 roku kierunku Informatyka (specjalizacji Inżynieria systemów informatycznych) na Wydziale Elektrotechniki i Informatyki Politechniki Rzeszowskiej. <br>Kontakt e-mailowy: <script type="text/javascript">emailE='henrietta.com.pl'; emailE=('piotr.maslanka' + '@' + emailE); document.write(emailE);</script>
+</p>
+<p>
+    Podziękowania dla:
+    <ul>
+        <li>Justyna Geleta - dobór kolorystyki</li>
+        <li>Adrian Siekierka - <script type="text/javascript">emailE='asie.pl'; emailE=('kontakt' + '@' + emailE); document.write(emailE);</script> - uwagi dot. zabezpieczeń</li>
+    </ul>
+</p>
+<div style="margin-bottom: 20px;"></div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base-layout.html" %}
+
+{# page for not-logged-in users who visit the page root #}
+
+{% block title %}Strona główna{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    h1 { font-size: 1.5em; margin-bottom: 3px; }
+    p { text-align: justify; margin-top: 10px; margin-bottom: 10px;}
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+    <li class="current"><a href="/">Główna</a></li>
+    <li><a href="/register/">Zarejestruj</a></li>
+    <li><a href="/login/">Zaloguj</a></li>
+    <li><a href="/login/demo/">Demo</a></li>
+{% endblock %}
+
+{% block layout_content %}
+<h1>Witaj w systemie egzaminacyjnym Athena!</h1>
+
+<p>
+    System egzaminacyjny Athena pozwala na konstruowanie i przeprowadzanie elastycznych testów zamkniętych. Ocena jest wystawiania automatycznie po zakończeniu egzaminu zgodnie z wcześniej zdefiniowanymi zasadami rozliczeń. Dostęne są funkcje podsumowań zbiorczych dla przeprowadzających testy i możliwość podglądu na pytania i sprawdzenie "jak poszło" przez zdającego.
+</p>
+<p>
+    Dostępna jest wersja demonstracyjna, na którą można się zalogować i spróbować swoich sił w testowych egzaminach, udostępnionych przez administratorów. Wystarczy w tym celu wejść w zakładkę <a href="/login/demo/">Demo</a>.
+</p>
+<p>
+    Więcej o systemie można przeczytać <a href="/about/">tutaj</a>.
+</p>
+<div style="margin-bottom: 20px;"></div>
+{% endblock %}

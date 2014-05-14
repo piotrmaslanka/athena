@@ -1,0 +1,12 @@
+{% extends "rteacher/manage_groups_list.html" %}
+
+{% block title %}Dodaj nową grupę{% endblock %}
+
+{% block layout_rightside %}
+    <h1>Utwórz nową grupę</h1>
+    <form action="/teacher/groups/create/" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Utwórz">
+    </form>
+
+{% endblock %}

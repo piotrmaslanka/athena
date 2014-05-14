@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Protokół zdawania nr {{ testresult.id }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style type="text/css">
+        .str { font-weight: bold; }
+        .answers { margin-left: 30px; }
+        .footnote { font-size: 0.8em; }
+        .sepa { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Protokół zdawania nr {{ testresult.id }}</h1>
+    <p>
+        Zdający: <span class="str">{{ testresult.written_by.name }} {{ testresult.written_by.surname }} {{ testresult.written_by.number }}</span><br>
+        {% if percentage != None %}
+        Egzamin rozpoczęto <span class="str">{{ protocol.test_start_on }}</span> zakończono <span class="str">{{ protocol.test_end_on }}</span><br>
+        Uzyskano <span class="str">{{ protocol.score }}</span> punktów z <span class="str">{{ protocol.max_score }}</span> możliwych (<span class="str">{{ percentage }}%</span> poprawnych)<br>
+        {% else %}
+            <span class="str">Egzamin został anulowany podczas zdawania przez prowadzącego.</span><br>
+        {% endif %}
+        
+        Zdawano test <span class="str">{{ exam.test.name }}</span>
+    </p>
+    
+    <hr>
+    <h1>Zasady rozliczenia:</h1>
+    <p>
+        dostateczny (3): od <span class="str">{{ exam.test.g3_starts_at }}%</span> do <span class="str">{{ exam.test.g35_starts_at }}%</span><br>
+        dostateczny + (3,5): od <span class="str">{{ exam.test.g35_starts_at }}%</span> do <span class="str">{{ exam.test.g4_starts_at }}%</span><br>
+        dobry (4): od <span class="str">{{ exam.test.g4_starts_at }}%</span> do <span class="str">{{ exam.test.g45_starts_at }}%</span><br>
+        dobry + (4,5): od <span class="str">{{ exam.test.g45_starts_at }}%</span> do <span class="str">{{ exam.test.g5_starts_at }}%</span><br>
+        bardzo dobry (5): od <span class="str">{{ exam.test.g5_starts_at }}%</span> do <span class="str">100%</span><br>
+        
+    </p>
+    
+    {% if percentage != None %}
+    <hr>
+
+    <h1>Pytania i udzielone odpowiedzi:</h1>
+    <div class="sepa">
+        {% for questiontext, points, answers, pts_gained, question_id, attachment_url in protocol.questions %}
+        <span class="str">{{ questiontext }}</span><br>
+        <span class="footnote">{{ points }} punktów do zdobycia. Zdobyto {{ pts_gained }} punktów.</span><br>
+        {% if attachment_url %}
+        Załącznik:<br>
+        <img src="{{ attachment_url }}" style="width: 400px;"><br>
+        {% endif %}
+        <div class="answers">
+            {% for studanswer, realanswer, text, answer_id in answers %}
+                {{ text }}<br>
+                <span class="footnote">Udzielono odpowiedzi {% if studanswer %}TAK{% else %}NIE{% endif %}, poprawna to {% if realanswer %}TAK{% else %}NIE{% endif %}</span>
+                <br>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>        
+    {% endif %}
+</body>
+</html>

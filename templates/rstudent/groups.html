@@ -1,0 +1,45 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Grupy{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    h1 { font-size: 1.5em; margin-bottom: 3px; }
+    p { text-align: justify; margin-left: 30px; }
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+    {% if request.user.is_demo %}
+        <li><a href="/">Główna</a></li>
+    {% else %}
+        <li><a href="/profile/">Profil</a></li>
+    {% endif %}
+    <li><a href="/test/">Egzamin</a></li>
+    <li><a href="/past/">Wyniki</a></li>
+    <li class="current"><a href="/groups/">Grupy</a></li>
+{% endblock %}
+
+{% block layout_content %}
+{% if not request.user.is_demo %}
+<a href="/groups/join/">Dołącz do innej grupy...</a>
+{% endif %}
+
+<h1 style="margin-top: 20px;">Jesteś w grupach</h1>
+<p>
+    {% for group in you_are_in %}
+        {{ group.name }} (u {{ group.teacher.name }} {{ group.teacher.surname }})<br>
+    {% empty %}
+        brak
+    {% endfor %}
+</p>
+<h1>Ubiegasz się o przyjęcie do</h1>
+<p>
+    {% for jrq in you_want_to_be_in %}
+        {{ jrq.group.name }} (u {{ jrq.group.teacher.name }} {{ jrq.group.teacher.surname }})<br>
+    {% empty %}
+        brak
+    {% endfor %}
+</p>
+<div style="margin-bottom: 20px;"></div>
+{% endblock %}

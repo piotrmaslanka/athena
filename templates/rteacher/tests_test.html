@@ -1,0 +1,92 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Test - {{ test.name }}{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    h1 { font-size: 1.5em; }
+    #aj_time { width: 60px; }
+    .eitem { width: 260px; display: inline-block; height: 30px; text-align: center; }
+    .category .catname { font-size: 1.5em; }
+    .invalid { color: red; }
+    #base_rightside ul, #base_rightside li { 
+        margin-left: 30px;
+        list-style-type: circle;
+    }
+</style>
+<script type="text/javascript">
+    $(function() {
+        $('#aj_time').change(function() {
+            $('#aj_time').attr('disabled', 'disabled');
+            $.post('/teacher/tests/{{ test.id }}/ajax/', {
+                time: $('#aj_time').val(),
+                operation: 'change_time'
+            }, function(data) {
+                $('#aj_time').val(data['value']).removeAttr('disabled');
+            });
+        });
+    });    
+</script>
+{% block extrajs %}{% endblock %}
+{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/profile/">Profil</a></li>
+    <li><a href="/teacher/groups/">Grupy</a></li>
+    <li><a href="/teacher/exams/">Egzaminy</a></li>
+    <li class="current"><a href="/teacher/tests/">Baza testów</a></li>
+{% endblock %}
+
+{% block layout_content %}
+    <div style="float: right;"><a href="/teacher/tests/{{ test.id }}/delete/">Usuń test</a></div>
+    <h1><a href="/teacher/tests/{{ test.id }}/">{{ test.name }}</a></h1>
+    <div class="eitem">
+    {% if test.is_multichoice %}Wielokrotnego wyboru{% else %}Jednokrotnego wyboru{% endif %}
+    </div>
+    <div class="eitem">
+    {% if test.is_time_per_question %}
+        Długość testu determinują pytania
+    {% else %}
+        Test trwa <input type="text" id="aj_time" value="{{ test.time|default_if_none:"" }}"> sekund
+    {% endif %}
+    </div>
+    <div class="eitem">
+    {% if test.can_go_back %}Można się cofać{% else %}Nie można się cofać{% endif %}
+    </div>
+    <hr>
+
+    <div id="base_leftside">
+        {% for cat in test.category_set.all %}
+        <p class="category">
+            {% if category == cat %}
+                <span class="catname">{{ cat.name }}</span>
+            {% else %}
+                <a class="catname" href="/teacher/tests/{{ test.id }}/category/{{ cat.id }}/">{{ cat.name }}</a> 
+            {% endif %}
+            {% if not cat.is_valid %}<span class="invalid">(Niepoprawny - edytuj)</span>{% endif %} (wylosuję {{ cat.question_amount }} z {{ cat.question_set.count }} pytań)
+        </p>
+        {% endfor %}
+
+        {% if creating_new_category %}
+            <div style="margin-top: 20px;">Dodaj kategorię</div>
+        {% else %}
+            <a style="margin-top: 20px; display: block;" href="/teacher/tests/{{ test.id }}/category/create/">Dodaj kategorię</a>
+        {% endif %}
+    </div>
+
+    <div id="base_rightside">
+        {% block layout_rightside %}
+        <div style="margin-left: 30px;">Właściwości testu:</div>
+        <ul>
+            {% if test.is_demo %}<li>Dostępny dla konta demonstracyjnego</li>{% endif %}
+            {% if test.can_review_mistakes %}<li>Można obejrzeć odpowiedzi po oddaniu</li>{% endif %}
+            
+        </ul>            
+        <div style="margin-top: 20px; margin-left: 30px;">Procentowe progi oceniania wyników testu:</div>
+        <form action="/teacher/tests/{{ test.id }}/" method="post">
+            {{ form.as_p }}
+            <input type="submit" value="Zapisz">
+        </form>
+        {% endblock %}
+    </div>
+{% endblock %}

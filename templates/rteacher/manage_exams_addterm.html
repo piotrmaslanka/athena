@@ -1,0 +1,20 @@
+{% extends "rteacher/manage_exams_list.html" %}
+
+{% block title %}Dodaj termin - {{ exam.name }}{% endblock %}
+
+{% block layout_head %}
+<script type="text/javascript" src="/media/js/jquery-ui-1.10.4.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/media/css/jquery-ui-1.10.4.custom.min.css">
+<script type="text/javascript"> $(function() {
+    $("#id_term_time").datetimepicker();
+  });</script>
+
+{% endblock %}
+
+{% block layout_rightside %}
+    <h1>Utwórz nowy termin do egzaminu {{ exam.name }}</h1>
+    <form action="/teacher/exams/{{ exam.id }}/addterm/" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Utwórz">
+    </form>
+{% endblock %}

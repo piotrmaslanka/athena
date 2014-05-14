@@ -1,0 +1,42 @@
+{% extends "rteacher/manage_exams_list.html" %}
+
+{% block layout_head %}
+<style type="text/css">
+    th { font-weight: bold; }
+    table { text-align: center; margin-bottom: 20px; }
+    td, th { padding-right: 10px; }
+</style>
+<script type="text/javascript" src="/media/js/jquery-ui-1.10.4.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/media/css/jquery-ui-1.10.4.custom.min.css">
+<script type="text/javascript"> $(function() {
+    $("#id_term_time").datetimepicker();
+  });</script>
+{% endblock %}
+
+{% block title %}Zarządzanie - {{ exam.name }}{% endblock %}
+
+{% block layout_rightside %}
+    <form action="/teacher/exams/{{ exam.id }}/" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Zapisz">
+    </form>
+
+    <div style="margin: 10px 0px 20px 30px;">
+
+        Stan: 
+        {% if term.is_closed %}
+            <span style="font-weight: bold;">Zamknięty</span><br>
+            Oznacza to że uczestnicy nie mogą już uczestniczyć w tym terminie. Wyniki można obejrzeć  <a href="/teacher/exams/{{ exam.id}}/terms/{{ term.id }}/supervise/">w opcji nadzorowania terminu</a>.
+        {% elif term.is_progressing %}
+            <span style="font-weight: bold;">W trakcie</span><br>
+            Oznacza to że uczestnicy są w trakcie pisania egzaminu. Postęp można obserwować <a href="/teacher/exams/{{ exam.id}}/terms/{{ term.id }}/supervise/">poprzez opcję nadzorownia terminu</a>
+        {% else %}
+            <span style="font-weight: bold;">Oczekujący</span><br>
+            Termin oczekuje aż uczestnicy zostaną określeni przez nauczyciela i uruchomiony zostanie egzamin w tym terminie. Można to uczynić <a href="/teacher/exams/{{ exam.id }}/terms/{{ term.id }}/setup/">poprzez opcję uruchamiania terminu</a>.
+        {% endif %}
+    </div>
+
+    <form action="/teacher/exams/{{ exam.id }}/terms/{{ term.id }}/delete/" method="post" class="ml30">
+        <input type="submit" value="Usuń termin">
+    </form>
+{% endblock %}

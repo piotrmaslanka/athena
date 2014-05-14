@@ -1,0 +1,163 @@
+#helper_stuff { display: none; }
+
+#rfield {
+    /* Rule Field
+    
+        This fields contains utilities to show basic rules about exam
+    */
+    width: 700px;
+    margin: 0px 50px 0px 50px;
+    font-size: 1.1em;
+}
+
+#rfield p {
+    margin-bottom: 10px;
+}
+    #rfield ul {
+        list-style-type: circle;
+    }
+        #rfield li {
+            margin-left: 20px;
+        }
+
+#rfield .accept {
+    margin: 20px auto;
+    width: 700px;
+    height: 50px;
+    font-size: 1.5em;
+    background-color: green;
+    border: 1px solid black;
+    line-height: 50px;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    border-radius: 5px;    
+}
+
+#opfield {  
+    /* OPeration Field 
+        This fields contains utilities to display and answer questions 
+    */
+    width: 800px;
+    margin: 20px 0px 20px 0px;
+}
+
+#opfield .largedisclaimer {     /* Big letters 'test finished' or 'wait for test' stuff */
+    width: 800px;
+    margin-top: 30px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 2em;
+}
+#opfield .subdisclaimer {
+    width: 800px;
+    margin-top: 10px;
+    text-align: center;
+}
+    
+#opfield .tophdr {      /* top header with test name and header */
+    width: 800px;
+    font-size: 2em;
+}
+    #opfield .tophdr .name { float: left; }
+    #opfield .tophdr .time { float: right; }
+
+#opfield .qspace {  /* space with question content and optional attachment */
+    clear: both;
+    width: 800px;
+    margin-top: 5px;
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-family: sans-serif;
+}
+    #opfield .qspace .attc {
+        display: inline;
+    }
+
+#opfield .aspace {  /* space with answers */
+    clear: both;
+    font-family: sans-serif;
+    width: 800px;
+    font-size: 1.4em;
+    margin-bottom: 15px;
+}
+    #opfield .aspace .answer {
+        line-height: 35px;
+        clear: both;
+        vertical-align: middle;
+    }
+    #opfield .aspace .answer input {
+        float: left;
+        height: 20px;
+        width: 20px;
+        margin-right: 20px;
+        display: inline-block;
+    }
+
+#opfield .aspace #answer_button {
+    border-radius: 5px;    
+    margin: 20px auto 0px auto;
+    width: 200px;
+    height: 50px;
+    background-color: green;
+    border: 1px solid black;
+    line-height: 50px;
+    text-align: center;
+    font-size: 1.1em;
+    display: inline-block;
+    cursor: pointer;
+}
+
+#opfield .aspace #endtest_button {
+    border-radius: 5px;    
+    float: right;
+    margin: 20px auto 0px auto;
+    width: 200px;
+    height: 50px;
+    background-color: red;
+    border: 1px solid black;
+    line-height: 50px;
+    font-size: 1.1em;
+    color: white;
+    text-align: center;
+    display: inline-block;    
+    cursor: pointer;
+}
+
+#opfield .qlspace { /* space with options to select a question */
+    clear: both;
+    width: 800px;
+}
+    #opfield .qlspace .prev {
+        cursor: pointer;
+        font-size: 3em;
+        font-weight: bold;
+        margin-left: 80px;
+        float: left;
+        display: inline-block;
+        border: 1px solid black;
+        border-radius: 5px;    
+    }
+    #opfield .qlspace .next {
+        cursor: pointer;
+        font-size: 3em;
+        border: 1px solid black;
+        margin-right: 80px;
+        font-weight: bold;
+        float: right;
+        display: inline-block;
+        border-radius: 5px;    
+    }
+    #opfield .qlspace .sep {
+        clear: both;
+    }
+    #opfield .qlspace .i {
+        cursor: pointer;    
+        display: inline-block;
+        border-radius: 3px;    
+        margin: 5px 5px 5px 5px;
+        height: 20px; width: 20px; border: 1px solid black; line-height: 20px; text-align: center;
+    }
+    #opfield .qlspace .this { background-color: gray; color: white; }
+    #opfield .qlspace .answered { background-color: darkgray; color: white; }

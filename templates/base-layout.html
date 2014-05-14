@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block base_head %}
+    <link rel="stylesheet" type="text/css" href="/media/css/layout.css">
+    {% block layout_head %}{% endblock %}
+{% endblock %}
+
+{% block base_body %}
+<div id="base_root">
+    <div id="base_header">
+        {% block layout_header %}    
+            <img src="/media/img/sim.png" alt="Sowa IMproved">
+        {% endblock %}
+        <div class="login_box">
+            {% if request.user %}
+                Jesteś zalogowany jako {{ request.user.name }} {{ request.user.surname }}.<br><a href="/logout/">Wyloguj</a>
+            {% else %}
+                <a href="/login/">Zaloguj</a>
+            {% endif %}
+        </div>        
+        <div class="athena_text">System egzaminacyjny ATHENA</div>
+    </div>
+    <div id="base_nav">
+        <ul>
+            {% block layout_entries %}
+                <li class="current"><a href="#">Hyperlink1</a></li>
+                <li><a href="#">Hyperlink 2</a></li>
+                <li><a href="#">Hyperlink 3</a></li>
+                <li><a href="#">Hyperlink 4</a></li>
+            {% endblock %}
+        </ul>
+    </div>
+    {% if messages %}
+        <div id="base_messages">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="msg{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div id="base_content">
+        {% block layout_content %}{% endblock %}
+    </div>
+    <div id="base_prefooter"></div>
+    <div id="base_footer">
+            <a href="http://weii.prz.edu.pl/" target="_blank" class="img">
+                <img class="logoweii" src="/media/img/weiilogo.png" alt="logo WEiI">
+            </a>
+            <a href="http://prz.edu.pl/" target="_blank" class="img">
+                <img class="logoprz" src="/media/img/przlogo.png" alt="logo PRz">
+            </a>
+            <a href="http://web.prz.edu.pl/" target="_blank" class="img">
+                <img class="logotsw" src="/media/img/tswlogo.png" alt="logo TSW">
+            </a>
+        <div class="text">
+            Copyright &copy; Politechnika Rzeszowska 2013-2014<br>
+            <a href="/about/">by Piotr Maślanka</a>
+        </div>
+        <div class="side">
+            wykonano na przedmiot
+        </div>
+    </div>
+</div>
+{% endblock %}

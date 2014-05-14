@@ -1,0 +1,12 @@
+{% extends "rteacher/tests_test.html" %}
+
+{% block title %}Dodaj nową kategorię{% endblock %}
+
+{% block layout_rightside %}
+    <h1>Utwórz nową kategorię</h1>
+    <form action="/teacher/tests/{{ test.id }}/category/create/" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Utwórz">
+    </form>
+
+{% endblock %}

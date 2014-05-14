@@ -1,0 +1,22 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Logowanie{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    form { margin: 10px 0px 20px 30px;}
+    form label { width: 120px; display: inline-block; }
+    .errorlist { margin-left: 10px; color: red; font-weight: bold;}
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+    <li class="current">Logowanie</li>
+{% endblock %}
+
+{% block layout_content %}
+    <form action="/admin-login/" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Zaloguj">
+    </form>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Rejestracja studenta{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    form { margin: 10px 0px 20px 30px;}
+    form label { width: 120px; display: inline-block; }
+    .errorlist { margin-left 10px; color: red; font-weight: bold;}
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/">Główna</a></li>
+    <li class="current"><a href="/register/">Zarejestruj</a></li>
+    <li><a href="/login/">Zaloguj</a></li>
+    <li><a href="/login/demo/">Demo</a></li>
+{% endblock %}
+
+{% block layout_content %}
+    <p>
+        Podawaj przy rejestracji prawdziwe dane. Nauczyciel zweryfikuje je, gdy złożysz podanie do konkretnej grupy, co powinieneś uczynić po zalogowaniu. Nie możesz przystąpić do żadnego egzaminu, jeśli nie należysz do jakiejkolwiek grupy.
+    </p>
+
+    <form action="/register/" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Zarejestruj">
+    </form>
+{% endblock %}

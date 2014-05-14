@@ -1,0 +1,49 @@
+{% extends "rteacher/manage_exams_list.html" %}
+
+{% block layout_head %}
+<style type="text/css">
+    th { font-weight: bold; }
+    table { text-align: center; margin-bottom: 20px; }
+    td, th { padding-right: 10px; }
+</style>
+{% endblock %}
+
+{% block title %}Zarządzanie - {{ exam.name }}{% endblock %}
+
+{% block layout_rightside %}
+    <form action="/teacher/exams/{{ exam.id }}/" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Zapisz">
+    </form>
+
+    <div style="margin: 10px 0px 20px 30px;">
+
+        <table>
+            <tr><th>Nazwa</th><th>Data</th><th>Stan</th></tr>
+            {% for term in exam.term_set.all %}
+                <tr>
+                    <td><a href="/teacher/exams/{{ exam.id }}/terms/{{ term.id }}/">{{ term.name }}</a></td>
+                    <td>{{ term.term_time|date:"d-m-Y H:i" }}</td>
+                    <td>
+                        {% if term.is_closed %}
+                            Zakończony
+                        {% else %}
+                            {% if term.is_progressing %}
+                                W trakcie
+                            {% else %}
+                                Oczekujący
+                            {% endif %}
+                        {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+
+        <a href="/teacher/exams/{{ exam.id }}/addterm/">Dodaj termin</a>
+    </div>
+
+    <form action="/teacher/exams/{{ exam.id }}/delete/" method="post" class="ml30">
+        <input type="submit" value="Usuń egzamin">
+    </form>
+
+    <a style="margin-left: 30px;" href="/teacher/exams/table/{{ exam.id }}/" target="_blank">Tabela zdawań</a>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "rteacher/manage_groups_list.html" %}
+
+{% block title %}Grupa {{ group.name }} - lista członków{% endblock %}
+
+{% block layout_rightside %}
+<h1>Grupa {{ group.name }} - członkowie</h1>
+    <table>
+        <tr>
+            <th style="width: 200px;">Imię i nazwisko</th>
+            <th>Nr albumu</th>
+            <th></th>
+        </tr>
+    {% for member in group.students.all %}
+        <tr>
+            <td>{{ member.name }} {{ member.surname }}</td>
+            <td>{{ member.number }}</td>
+            <td>
+                <form action="/teacher/groups/{{ group.id }}/members/" method="post">
+                    <input type="hidden" name="user_id" value="{{ member.id }}">
+                    <input type="submit" value="Usuń">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<div style="margin-bottom: 20px;"></div>
+{% endblock %}

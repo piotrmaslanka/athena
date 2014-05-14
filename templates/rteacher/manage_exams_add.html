@@ -1,0 +1,12 @@
+{% extends "rteacher/manage_exams_list.html" %}
+
+{% block title %}Dodaj nowy egzamin{% endblock %}
+
+{% block layout_rightside %}
+    <h1>Utwórz nowy egzamin</h1>
+    <form action="/teacher/exams/create/" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Utwórz">
+    </form>
+
+{% endblock %}

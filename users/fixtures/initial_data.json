@@ -1,0 +1,35 @@
+[{
+    "pk": 1,
+    "model": "users.user",
+    "fields": {
+        "status": 2,
+        "name": "Domyślny",
+        "surname": "administrator",
+        "number": 0,
+        "login": "root@example.com",
+        "password": "ff8cd71659c3740537b19551d0d8eb2d7da099b5"
+    }
+},
+{
+    "pk": 2,
+    "model": "users.user",
+    "fields": {
+        "status": 1,
+        "name": "Domyślny",
+        "surname": "nauczyciel",
+        "number": 0,
+        "login": "teacher@demo.athena",
+        "password": "098ea47eaf7e33dc05820f65141cc3a2aca8d426"
+    }
+},
+{
+    "pk": 1,
+    "model": "rteacher.Group",
+    "fields": {
+        "teacher": 2,
+        "name": "DEMO",
+        "description": "Grupa tymczasowych kont Demo. Konta są kasowane po wylogowaniu się użytkownika",
+        "is_archival": true,
+        "created_on": "2014-01-01 00:00"
+    }
+}]

@@ -1,0 +1,48 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Profil{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    h1 { font-size: 1.5em; margin-bottom: 3px; }
+    p { text-align: justify; margin-top: 10px; margin-bottom: 10px;}
+    #seltest { 
+        list-style-type: circle;
+    }
+    #seltest li { margin-left: 30px; }
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+{% if request.user.status == 0 %}
+    {% if request.user.is_demo %}
+        <li><a href="/">Główna</a></li>
+    {% else %}
+        <li class="current"><a href="/profile/">Profil</a></li>
+    {% endif %}
+    <li><a href="/test/">Egzamin</a></li>
+    <li><a href="/past/">Wyniki</a></li>
+    <li><a href="/groups/">Grupy</a></li>
+{% elif request.user.status == 1 %}
+    <li class="current"><a href="/profile/">Profil</a></li>
+    <li><a href="/teacher/groups/">Grupy</a></li>
+    <li><a href="/teacher/exams/">Egzaminy</a></li>
+    <li><a href="/teacher/tests/">Baza testów</a></li>
+{% elif request.user.status == 2 %}
+    <li class="current"><a href="/profile/">Profil</a></li>
+    <li><a href="/admin/accounts/">Konta</a></li>
+{% endif %}
+{% endblock %}
+
+{% block layout_content %}
+<h1>Profil</h1>
+<p>Na tej stronie możesz zmienić swoje hasło.</p>
+
+<h1>Zmień hasło</h1>
+<form action="/profile/" method="post">
+    {{ cpf.as_p }}
+    <input type="submit" name="changepwd" value="Zmień hasło">
+</form>
+
+<div style="margin-bottom: 20px;"></div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Grupy{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    h1 { font-size: 1.5em; margin-bottom: 3px; }
+    p { text-align: justify; margin-left: 30px; }
+</style>
+<script type="text/javascript">
+    function join(group_id) {
+        var k = '<form action="/groups/join/" method="post">';
+        k += '<p><label for="id_description">Opis:</label><textarea id="id_description" name="description"></textarea></p>';
+        k += '<input type="hidden" name="id" value="'+group_id+'">';
+        k += '<p><input type="submit" value="Wyślij"></p></form>';
+        $('#group_'+group_id).after(k);
+    }
+</script>
+{% endblock %}
+
+{% block layout_entries %}
+    {% if request.user.is_demo %}
+        <li><a href="/">Główna</a></li>
+    {% else %}
+        <li><a href="/profile/">Profil</a></li>
+    {% endif %}
+
+    <li><a href="/test/">Egzamin</a></li>
+    <li><a href="/past/">Wyniki</a></li>
+    <li class="current"><a href="/groups/">Grupy</a></li>
+{% endblock %}
+
+{% block layout_content %}
+<h1>Dostępne grupy do dołączenia</h1>
+<p>
+    {% for group in available %}
+        <a href="#" onclick="join({{ group.id }})" id="group_{{ group.id }}">
+            {{ group.name }} (u {{ group.teacher.name }} {{ group.teacher.surname }})
+        </a><br>
+    {% empty %}
+        brak
+    {% endfor %}
+</p>
+<div style="margin-bottom: 20px;"></div>
+{% endblock %}

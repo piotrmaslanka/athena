@@ -1,0 +1,24 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Egzamin{% endblock %}
+
+{% block layout_head %}
+<link rel="stylesheet" type="text/css" href="/media/css/test.css">
+<script type="text/javascript" src="/media/js/test.js"></script>
+{% endblock %}
+
+{% block layout_entries %}
+    {% if request.user.is_demo %}
+        <li><a href="/">Główna</a></li>
+    {% else %}
+        <li><a href="/profile/">Profil</a></li>
+    {% endif %}
+    <li class="current"><a href="/test/">Egzamin</a></li>
+    <li><a href="/past/">Wyniki</a></li>
+    <li><a href="/groups/">Grupy</a></li>
+{% endblock %}
+
+{% block layout_content %}
+<div id="opfield">
+</div>
+{% endblock %}

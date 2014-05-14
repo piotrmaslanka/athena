@@ -1,0 +1,40 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Lista wyników{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    .str { font-weight: bold; }
+    .answers { margin-left: 30px; }
+    .footnote { font-size: 0.8em; }
+    .sepa { margin-top: 20px; }
+    .green { color: green; font-weight: bold; }
+    .red { color: red; font-weight: bold; }
+    h1 { margin-bottom: 20px; }
+    #cresults { line-height: 25px; }
+    #cresults a { display: block; }
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+    {% if request.user.is_demo %}
+        <li><a href="/">Główna</a></li>
+    {% else %}
+        <li><a href="/profile/">Profil</a></li>
+    {% endif %}
+    <li><a href="/test/">Egzamin</a></li>
+    <li class="current"><a href="/past/">Wyniki</a></li>
+    <li><a href="/groups/">Grupy</a></li>
+{% endblock %}
+
+{% block layout_content %}
+    <h1>Lista wyników</h1>
+    <div id="cresults">
+    {% for result in results %}
+            <a href="/past/{{ result.id }}/">{{ result.time_of_end|date:"d-m-Y H:i" }} - {{ result.term.exam.test.name }} : ocena {{ result.grade }}</a>
+    {% empty %}
+    </div>
+        <div style="margin-left: 20px; margin-top: 20px;">brak wyników</div>
+    {% endfor %}
+    <div style="margin-bottom: 20px;"></div>
+{% endblock %}

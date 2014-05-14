@@ -1,0 +1,59 @@
+{% extends "base-layout.html" %}
+
+{# root page for students #}
+
+{% block title %}Strona główna{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    h1 { font-size: 1.5em; margin-bottom: 3px; }
+    p { text-align: justify; margin-top: 10px; margin-bottom: 10px;}
+    #seltest { 
+        list-style-type: circle;
+    }
+    #seltest li { margin-left: 30px; }
+</style>
+{% endblock %}
+
+{% block layout_entries %}
+    {% if request.user.is_demo %}
+        <li class="current"><a href="/">Główna</a></li>
+    {% else %}
+        <li><a href="/profile/">Profil</a></li>
+    {% endif %}
+    <li><a href="/test/">Egzamin</a></li>
+    <li><a href="/past/">Wyniki</a></li>
+    <li><a href="/groups/">Grupy</a></li>
+{% endblock %}
+
+{% block layout_content %}
+<h1>Witaj w systemie egzaminacyjnym Athena!</h1>
+
+{% if not request.user.is_demo %}
+    <p>Jesteś studentem - nazywasz się {{ request.user.name }} {{ request.user.surname }} i twój nr albumu to {{ request.user.number }}
+    </p>
+    <p>
+        Jeśli aktualnie masz pisać jakiś egzamin, przejdź do zakładki <a href="/test/">Egzamin</a> i oczekuj pojawienia się dalszych instrukcji.
+    </p>
+    <p>
+        Jeśli jeszcze nie zapisałeś się do właściwej grupy - lub grup - możesz uczynić to w zakładce <a href="/groups/">Grupy</a>. Pamiętaj że nie będzie to natychmiastowe - nadzorujący grupe nauczyciel musi zatwierdzić Twoje podanie.
+    </p>
+    <p>
+        Swoje hasło możesz zmienić w zakładce <a href="/profile/">Profil</a>.
+    </p>
+{% else %}
+    <p>Witaj na koncie testowym systemu egzaminacyjnego. Z poziomu tego testu możesz zobaczyć w jaki sposób wypełnia się testy w systemie oraz spróbować swoich sił w przykładowych testach.</p>
+    <p>Jeśli chcesz zacząć, wybierz jeden z demonstracyjnych testów:
+        <ul id="seltest">
+            {% for test in demos %}
+                <li><a href="/demo/start/{{ test.id }}/">{{ test.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </p>
+
+    <p>
+        Dane dotyczące zdanych testów i wyników zostaną automatycznie skasowane gdy się wylogujesz.
+    </p>
+{% endif %}
+<div style="margin-bottom: 20px;"></div>
+{% endblock %}

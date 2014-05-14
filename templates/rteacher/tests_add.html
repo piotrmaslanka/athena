@@ -1,0 +1,38 @@
+{% extends "base-layout.html" %}
+
+{% block title %}Dodaj nowy test{% endblock %}
+
+{% block layout_head %}
+<style type="text/css">
+    h1 { font-size: 1.5em; margin-bottom: 3px; }
+    form { margin: 10px 0px 20px 30px;}
+    form label { width: 250px; display: inline-block; }
+    .errorlist { margin-left: 10px; color: red; font-weight: bold;}
+</style>
+<script type="text/javascript">
+    $(function() {
+        $('#id_is_time_per_question').change(function() {
+            if ($('#id_is_time_per_question').is(':checked'))
+                $('#id_time').attr('disabled', 'disabled').val('');
+            else
+                $('#id_time').removeAttr('disabled');
+        })
+    });
+</script>
+{% endblock %}
+
+{% block layout_entries %}
+    <li><a href="/profile/">Profil</a></li>
+    <li><a href="/teacher/groups/">Grupy</a></li>
+    <li><a href="/teacher/exams/">Egzaminy</a></li>
+    <li class="current"><a href="/teacher/tests/">Baza testów</a></li>
+{% endblock %}
+
+{% block layout_content %}
+    <h1>Utwórz nowy test</h1>
+    <form action="/teacher/tests/create/" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Utwórz">
+    </form>
+
+{% endblock %}
